@@ -6,11 +6,18 @@ require 'sidewinder'
 options = {}
 OptionParser.new do |opts|
   opts.banner = "Usage: demo.rb [options]"
+
   opts.on("-a", "--algorithm ALGORITHM", "Choose algorithm") do |v|
     options[:algorithm] = v
   end
+
+  opts.on("-s", "--seed SEED", "Use a specific seed") do |v|
+    options[:seed] = v.to_i
+  end
 end.parse!
 
+seed = options[:seed] || Random.new_seed
+srand(seed)
 
 grid = Grid.new(18, 18)
 
@@ -24,5 +31,7 @@ when 'binary_tree'
 else
   raise ArgumentError, "Invalid algorithm"
 end
+
+puts "Generated with seed #{seed}"
 
 
