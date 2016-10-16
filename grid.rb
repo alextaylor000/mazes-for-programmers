@@ -1,6 +1,11 @@
 require 'cell'
 
 class Grid
+  CORNER = "+"
+  WALL_H = "-"
+  WALL_V = "|"
+  SPACE  = " "
+
   attr_reader :rows, :columns
 
   def initialize(rows, columns)
@@ -61,21 +66,21 @@ class Grid
   end
 
   def to_s
-    output = "+" + "---+" * columns + "\n"
+    output = CORNER + "#{WALL_H*3}#{CORNER}" * columns + "\n"
 
     each_row do |row|
-      top = "|"
-      bottom = "+"
+      top = "#{WALL_V}"
+      bottom = "#{CORNER}"
 
       row.each do |cell|
         cell = Cell.new(-1, -1) unless cell
 
-        body = "   "
-        east_boundary = (cell.linked?(cell.east) ? " " : "|")
+        body = "#{SPACE*3}"
+        east_boundary = (cell.linked?(cell.east) ? "#{SPACE}" : "#{WALL_V}")
         top << body << east_boundary
 
-        south_boundary = (cell.linked?(cell.south) ? "   " : "---")
-        corner = "+"
+        south_boundary = (cell.linked?(cell.south) ? "#{SPACE*3}" : "#{WALL_H*3}")
+        corner = "#{CORNER}"
         bottom << south_boundary << corner
       end
 
