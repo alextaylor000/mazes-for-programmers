@@ -1,27 +1,26 @@
 class Sidewinder
   def self.on(grid)
-    run = []
+    grid.each_row do |row|
+      run = []
 
-    grid.each_cell do |cell|
-      neighbours = []
-      neighbours << cell.north if cell.north
-      neighbours << cell.east if cell.east
+      row.each do |cell|
+        run << cell
 
-      index = rand(neighbours.length)
-      neighbour = neighbours[index]
+        at_eastern_boundary = (cell.east == nil)
+        at_northern_boundary = (cell.north == nil)
 
-      case index
-      when 0 # north
-        target = run.sample || cell
-        target.link(target.north) if target.north
+        should_close_out = at_eastern_boundary || (!at_northern_boundary && rand(2) == 0)
 
-        run = []
-      when 1 # east
-        if neighbour
-          cell.link(neighbour)
-          run << neighbour
+        if should_close_out
+          member = run.sample
+          member.link(member.north) if member.north
+          run.clear
+        else
+          cell.link(cell.east)
         end
       end
     end
+
+    grid
   end
 end
