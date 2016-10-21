@@ -66,7 +66,9 @@ class Grid
     end
   end
 
-  def to_s
+  def to_s(options)
+    debug_display = options[:debug_display] # :coord, :distance
+
     output = CORNER + "#{WALL_H*3}#{CORNER}" * columns + "\n"
 
     each_row do |row|
@@ -77,6 +79,9 @@ class Grid
         cell = Cell.new(-1, -1) unless cell
 
         body = "#{SPACE*3}"
+        body = "%3d" % cell.distance        if debug_display == :distance
+        body = "#{cell.row},#{cell.column}" if debug_display == :coord
+
         east_boundary = (cell.linked?(cell.east) ? "#{SPACE}" : "#{WALL_V}")
         top << body << east_boundary
 

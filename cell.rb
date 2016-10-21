@@ -2,9 +2,12 @@ class Cell
   attr_reader :row, :column
   attr_accessor :north, :south, :east, :west
 
+  attr_accessor :distance
+
   def initialize(row, column)
     @row, @column = row, column
     @links = {}
+    @distance = nil
   end
 
   def link(cell, bidi=true)
