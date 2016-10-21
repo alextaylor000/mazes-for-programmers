@@ -14,6 +14,10 @@ OptionParser.new do |opts|
   opts.on("-s", "--seed SEED", "Use a specific seed") do |v|
     options[:seed] = v.to_i
   end
+
+  opts.on("-o", "--output FILE", "Output result to a PNG file") do |v|
+    options[:output] = v
+  end
 end.parse!
 
 seed = options[:seed] || Random.new_seed
@@ -24,14 +28,20 @@ grid = Grid.new(18, 18)
 case options[:algorithm]
 when 'sidewinder'
   Sidewinder.on(grid)
-  puts grid
 when 'binary_tree'
   BinaryTree.on(grid)
-  puts grid
 else
   raise ArgumentError, "Invalid algorithm"
 end
 
 puts "Generated with seed #{seed}"
+
+if (options[:output])
+  grid.to_png.save options[:output]
+  puts "Saved PNG to #{options[:output]}"
+else
+  puts grid
+end
+
 
 
